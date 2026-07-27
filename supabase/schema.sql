@@ -96,7 +96,7 @@ SELECT
   s.time_management,
   s.total_score,
   s.advisor_remarks,
-  s.evaluated_at,
+  s.created_at AS evaluated_at,
   DENSE_RANK() OVER (PARTITION BY r.session_id ORDER BY s.total_score DESC) AS rank
 FROM scores s
 JOIN registrations r ON s.registration_id = r.id
