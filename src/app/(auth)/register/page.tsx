@@ -8,18 +8,29 @@ import { User, Mail, Phone, Building, BookOpen, Calendar, Lock, AlertCircle, Che
 
 export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccess(null);
 
     const formData = new FormData(e.currentTarget);
-    const result = await registerAction(formData);
+    try {
+      const result = await registerAction(formData);
 
-    if (result?.error) {
-      setError(result.error);
+      if (result?.error) {
+        setError(result.error.trim() || 'Unable to create the account. Please try again.');
+      } else if (result?.success) {
+        setSuccess(result.success);
+      } else {
+        setError('Unable to complete registration. Please try again.');
+      }
+    } catch {
+      setError('Unable to complete registration. Please try again.');
+    } finally {
       setLoading(false);
     }
   }
@@ -44,6 +55,13 @@ export default function RegisterPage() {
             <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 flex items-start space-x-3 text-red-600 text-sm">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
               <span>{error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100 flex items-start space-x-3 text-emerald-700 text-sm">
+              <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+              <span>{success}</span>
             </div>
           )}
 

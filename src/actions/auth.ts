@@ -99,33 +99,48 @@ export async function registerAction(formData: FormData) {
   });
 
   if (authError) {
-    return { error: authError.message };
+    return {
+      error:
+        authError.message?.trim() ||
+        'Unable to create the account. Please try again or check your Supabase Auth settings.',
+    };
   }
 
-  if (authData.user) {
-    // Automatically enroll student into currently active session if one exists and deadline hasn't passed
-    const { data: activeSession } = await supabase
-      .from('sessions')
-      .select('id, registration_deadline, max_participants')
-      .eq('status', 'active')
-      .maybeSingle();
+  if (!authData.user) {
+    return { error: 'Supabase did not create an account. Please try again.' };
+  }
 
-    if (activeSession) {
-      const deadlinePassed = new Date(activeSession.registration_deadline) < new Date();
-      if (!deadlinePassed) {
-        // Count active registrations
-        const { count } = await supabase
-          .from('registrations')
-          .select('id', { count: 'exact', head: true })
-          .eq('session_id', activeSession.id);
+  // When email confirmation is enabled, Supabase creates the account but does
+  // not create a browser session until the user verifies their email address.
+  if (!authData.session) {
+    return {
+      success:
+        'Account created. Check your email to verify your account, then sign in.',
+    };
+  }
 
-        if ((count || 0) < activeSession.max_participants) {
-          await supabase.from('registrations').insert({
-            student_id: authData.user.id,
-            session_id: activeSession.id,
-            status: 'registered',
-          });
-        }
+  // Automatically enroll student into currently active session if one exists and deadline hasn't passed
+  const { data: activeSession } = await supabase
+    .from('sessions')
+    .select('id, registration_deadline, max_participants')
+    .eq('status', 'active')
+    .maybeSingle();
+
+  if (activeSession) {
+    const deadlinePassed = new Date(activeSession.registration_deadline) < new Date();
+    if (!deadlinePassed) {
+      // Count active registrations
+      const { count } = await supabase
+        .from('registrations')
+        .select('id', { count: 'exact', head: true })
+        .eq('session_id', activeSession.id);
+
+      if ((count || 0) < activeSession.max_participants) {
+        await supabase.from('registrations').insert({
+          student_id: authData.user.id,
+          session_id: activeSession.id,
+          status: 'registered',
+        });
       }
     }
   }
