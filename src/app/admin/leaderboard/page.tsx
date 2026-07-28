@@ -2,6 +2,7 @@ import React from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
 import { AdminLeaderboardClient } from '@/components/admin/AdminLeaderboardClient';
+import type { LeaderboardEntry } from '@/types';
 
 export default async function AdminLeaderboardPage() {
   const supabase = await createClient();
@@ -22,7 +23,7 @@ export default async function AdminLeaderboardPage() {
     .eq('status', 'active')
     .maybeSingle();
 
-  let leaderboardEntries: any[] = [];
+  let leaderboardEntries: LeaderboardEntry[] = [];
 
   if (activeSession) {
     const { data: entries } = await supabase

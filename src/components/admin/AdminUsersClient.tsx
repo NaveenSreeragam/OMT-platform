@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { updateUserRoleAction, toggleUserActiveAction } from '@/actions/users';
-import { UserCheck, Shield, Search, Power } from 'lucide-react';
+import { updateUserRoleAction } from '@/actions/users';
+import { UserCheck, Search } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import type { Profile, UserRole } from '@/types';
 
 interface AdminUsersClientProps {
-  users: any[];
+  users: Profile[];
 }
 
 export function AdminUsersClient({ users }: AdminUsersClientProps) {
@@ -19,14 +20,10 @@ export function AdminUsersClient({ users }: AdminUsersClientProps) {
       u.department?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  async function handleRoleChange(userId: string, currentRole: string) {
-    const nextRole = currentRole === 'admin' ? 'student' : 'admin';
+  async function handleRoleChange(userId: string, currentRole: UserRole) {
+    const nextRole: UserRole = currentRole === 'admin' ? 'student' : 'admin';
     if (!confirm(`Are you sure you want to change this user's role to ${nextRole.toUpperCase()}?`)) return;
-    await updateUserRoleAction(userId, nextRole as any);
-  }
-
-  async function handleToggleActive(userId: string, is_active: boolean) {
-    await toggleUserActiveAction(userId, is_active);
+    await updateUserRoleAction(userId, nextRole);
   }
 
   return (

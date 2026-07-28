@@ -43,7 +43,7 @@ export default async function StudentDashboardPage() {
 
   let bestScore = 0;
   let avgScore = 0;
-  let totalSessions = studentScores?.length || 0;
+  const totalSessions = studentScores?.length || 0;
 
   if (studentScores && studentScores.length > 0) {
     const scoresList = studentScores.map((s) => Number(s.total_score));

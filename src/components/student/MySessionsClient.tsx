@@ -2,14 +2,20 @@
 
 import React, { useState } from 'react';
 import { formatDate } from '@/lib/utils';
-import { Calendar, Award, MessageSquare, X, ChevronRight } from 'lucide-react';
+import { Calendar, MessageSquare, X, ChevronRight } from 'lucide-react';
+import type { Registration, Score, Session } from '@/types';
+
+type RegistrationWithDetails = Registration & {
+  sessions?: Session | null;
+  scores?: Score[];
+};
 
 interface MySessionsClientProps {
-  sessions: any[];
+  sessions: RegistrationWithDetails[];
 }
 
 export function MySessionsClient({ sessions }: MySessionsClientProps) {
-  const [selectedSession, setSelectedSession] = useState<any | null>(null);
+  const [selectedSession, setSelectedSession] = useState<RegistrationWithDetails | null>(null);
 
   return (
     <div className="space-y-6">
@@ -50,7 +56,7 @@ export function MySessionsClient({ sessions }: MySessionsClientProps) {
 
                   <div className="flex items-center space-x-2 text-xs text-slate-500 mb-4">
                     <Calendar className="w-4 h-4 text-[#00629B]" />
-                    <span>{formatDate(session?.session_date)}</span>
+                    <span>{session?.session_date ? formatDate(session.session_date) : 'Date to be announced'}</span>
                   </div>
                 </div>
 
@@ -75,7 +81,7 @@ export function MySessionsClient({ sessions }: MySessionsClientProps) {
           <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <h3 className="text-lg font-bold text-slate-800">No Session History</h3>
           <p className="text-xs text-slate-500 mt-1">
-            You haven't participated in any completed One Minute Talk sessions yet.
+            You haven&apos;t participated in any completed One Minute Talk sessions yet.
           </p>
         </div>
       )}
@@ -145,7 +151,7 @@ export function MySessionsClient({ sessions }: MySessionsClientProps) {
                     <span>Advisor Remarks & Feedback</span>
                   </div>
                   <p className="text-sm text-slate-700 leading-relaxed italic">
-                    "{selectedSession.scores[0].advisor_remarks || 'No specific advisor remarks provided.'}"
+                    &ldquo;{selectedSession.scores[0].advisor_remarks || 'No specific advisor remarks provided.'}&rdquo;
                   </p>
                 </div>
               </div>

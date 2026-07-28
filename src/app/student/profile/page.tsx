@@ -23,7 +23,7 @@ export default async function StudentProfilePage() {
     .select('rank, total_score')
     .eq('student_id', user?.id || '');
 
-  let totalSessions = leaderboardData?.length || 0;
+  const totalSessions = leaderboardData?.length || 0;
   let bestScore = 0;
   let avgScore = 0;
   let highestRank: number | string = 'N/A';

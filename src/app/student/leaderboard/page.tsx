@@ -1,7 +1,8 @@
 import React from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { StudentSidebar } from '@/components/layout/StudentSidebar';
-import { Trophy, Medal, Award, UserCheck } from 'lucide-react';
+import { Trophy, Award } from 'lucide-react';
+import type { LeaderboardEntry } from '@/types';
 
 export default async function StudentLeaderboardPage() {
   const supabase = await createClient();
@@ -24,7 +25,7 @@ export default async function StudentLeaderboardPage() {
     .eq('status', 'active')
     .maybeSingle();
 
-  let leaderboardEntries: any[] = [];
+  let leaderboardEntries: LeaderboardEntry[] = [];
 
   if (activeSession) {
     const { data: entries } = await supabase

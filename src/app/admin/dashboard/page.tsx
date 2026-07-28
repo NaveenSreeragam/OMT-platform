@@ -1,7 +1,7 @@
 import React from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
-import { Calendar, Users, UserCheck, ClipboardCheck, Clock } from 'lucide-react';
+import { Users, UserCheck, ClipboardCheck, Clock } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function AdminDashboardPage() {

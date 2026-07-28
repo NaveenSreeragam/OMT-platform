@@ -4,11 +4,12 @@ import React, { useState } from 'react';
 import { registerForSessionAction } from '@/actions/sessions';
 import { Calendar, MapPin, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import type { Profile, Registration, Session } from '@/types';
 
 interface StudentDashboardProps {
-  student: any;
-  activeSession: any;
-  userRegistration: any;
+  student: Profile | null;
+  activeSession: Session | null;
+  userRegistration: Registration | null;
   stats: {
     bestScore: number;
     avgScore: number;

@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -22,6 +23,18 @@ const registerSchema = z.object({
   message: "Passwords don't match",
   path: ['confirmPassword'],
 });
+
+async function getSiteUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
+  }
+
+  const requestHeaders = await headers();
+  const host = requestHeaders.get('x-forwarded-host') || requestHeaders.get('host');
+  const protocol = requestHeaders.get('x-forwarded-proto') || (host?.startsWith('localhost') ? 'http' : 'https');
+
+  return host ? `${protocol}://${host}` : 'http://localhost:3000';
+}
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
@@ -82,6 +95,7 @@ export async function registerAction(formData: FormData) {
   }
 
   const supabase = await createClient();
+  const siteUrl = await getSiteUrl();
 
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
@@ -95,6 +109,7 @@ export async function registerAction(formData: FormData) {
         year,
         role: 'student',
       },
+      emailRedirectTo: `${siteUrl}/auth/confirm`,
     },
   });
 
@@ -115,7 +130,7 @@ export async function registerAction(formData: FormData) {
   if (!authData.session) {
     return {
       success:
-        'Account created. Check your email to verify your account, then sign in.',
+        'Account created. Check your email to verify your account and you will be signed in automatically.',
     };
   }
 

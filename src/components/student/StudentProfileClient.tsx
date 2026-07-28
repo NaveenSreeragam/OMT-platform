@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import { updateProfileInfo } from '@/actions/scores';
 import { User, Mail, Phone, Building, BookOpen, Calendar, AlertCircle, CheckCircle, Save } from 'lucide-react';
+import type { Profile } from '@/types';
 
 interface StudentProfileClientProps {
-  profile: any;
+  profile: Profile | null;
   stats: {
     totalSessions: number;
     bestScore: number;

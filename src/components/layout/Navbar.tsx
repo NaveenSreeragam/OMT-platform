@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Award, Calendar, BookOpen, Users, LogOut, ChevronRight } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { logoutAction } from '@/actions/auth';
 
 interface NavbarProps {

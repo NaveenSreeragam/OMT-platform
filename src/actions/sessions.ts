@@ -21,7 +21,7 @@ export async function createSessionAction(formData: FormData) {
   const venue = formData.get('venue') as string;
   const registrationDeadline = formData.get('registrationDeadline') as string;
   const maxParticipants = parseInt(formData.get('maxParticipants') as string || '100', 10);
-  const status = formData.get('status') as any;
+  const status = formData.get('status');
 
   const validation = sessionSchema.safeParse({
     title,
@@ -35,9 +35,10 @@ export async function createSessionAction(formData: FormData) {
   if (!validation.success) {
     return { error: validation.error.issues[0].message };
   }
+  const validatedStatus = validation.data.status;
 
   // If status is active, check if another session is already active
-  if (status === 'active') {
+  if (validatedStatus === 'active') {
     const { data: existingActive } = await supabase
       .from('sessions')
       .select('id')
@@ -55,7 +56,7 @@ export async function createSessionAction(formData: FormData) {
     venue,
     registration_deadline: new Date(registrationDeadline).toISOString(),
     max_participants: maxParticipants,
-    status,
+    status: validatedStatus,
   });
 
   if (error) {
@@ -75,7 +76,7 @@ export async function updateSessionAction(id: string, formData: FormData) {
   const venue = formData.get('venue') as string;
   const registrationDeadline = formData.get('registrationDeadline') as string;
   const maxParticipants = parseInt(formData.get('maxParticipants') as string || '100', 10);
-  const status = formData.get('status') as any;
+  const status = formData.get('status');
 
   const validation = sessionSchema.safeParse({
     title,
@@ -89,9 +90,10 @@ export async function updateSessionAction(id: string, formData: FormData) {
   if (!validation.success) {
     return { error: validation.error.issues[0].message };
   }
+  const validatedStatus = validation.data.status;
 
   // If setting status to active, verify no other active sessions exist
-  if (status === 'active') {
+  if (validatedStatus === 'active') {
     const { data: existingActive } = await supabase
       .from('sessions')
       .select('id')
@@ -112,7 +114,7 @@ export async function updateSessionAction(id: string, formData: FormData) {
       venue,
       registration_deadline: new Date(registrationDeadline).toISOString(),
       max_participants: maxParticipants,
-      status,
+      status: validatedStatus,
     })
     .eq('id', id);
 

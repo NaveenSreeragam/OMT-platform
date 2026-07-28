@@ -2,10 +2,17 @@
 
 import React, { useState } from 'react';
 import { saveScoreAction } from '@/actions/scores';
-import { ClipboardEdit, Save, CheckCircle2, AlertCircle, Calculator } from 'lucide-react';
+import { ClipboardEdit, Save, CheckCircle2, AlertCircle } from 'lucide-react';
+import type { Profile, Registration, Score, Session } from '@/types';
+
+type RegistrationWithDetails = Registration & {
+  profiles?: Profile | null;
+  sessions?: Session | null;
+  scores?: Score[];
+};
 
 interface ScoreEntryClientProps {
-  registrations: any[];
+  registrations: RegistrationWithDetails[];
 }
 
 export function AdminScoreEntryClient({ registrations }: ScoreEntryClientProps) {
@@ -88,7 +95,7 @@ export function AdminScoreEntryClient({ registrations }: ScoreEntryClientProps) 
           <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
             {registrations.map((reg) => {
               const isSelected = reg.id === selectedRegId;
-              const hasScore = reg.scores?.length > 0;
+              const hasScore = (reg.scores?.length ?? 0) > 0;
 
               return (
                 <button

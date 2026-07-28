@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Download, RefreshCw, Award, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { Download, RefreshCw, Award } from 'lucide-react';
+import type { LeaderboardEntry, Session } from '@/types';
 
 interface LeaderboardManagementProps {
-  activeSession: any;
-  leaderboardEntries: any[];
+  activeSession: Session | null;
+  leaderboardEntries: LeaderboardEntry[];
 }
 
 export function AdminLeaderboardClient({
   activeSession,
   leaderboardEntries,
 }: LeaderboardManagementProps) {
-  const [entries, setEntries] = useState(leaderboardEntries);
-  const [published, setPublished] = useState(true);
+  const entries = leaderboardEntries;
 
   function handleExportCSV() {
     if (!entries || entries.length === 0) return;

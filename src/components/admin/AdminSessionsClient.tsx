@@ -2,16 +2,17 @@
 
 import React, { useState } from 'react';
 import { createSessionAction, updateSessionAction, deleteSessionAction } from '@/actions/sessions';
-import { Plus, Edit2, Trash2, Calendar, MapPin, AlertCircle, X, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, MapPin, AlertCircle, X } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import type { Session } from '@/types';
 
 interface AdminSessionsClientProps {
-  sessions: any[];
+  sessions: Session[];
 }
 
 export function AdminSessionsClient({ sessions }: AdminSessionsClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSession, setEditingSession] = useState<any | null>(null);
+  const [editingSession, setEditingSession] = useState<Session | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +22,7 @@ export function AdminSessionsClient({ sessions }: AdminSessionsClientProps) {
     setIsModalOpen(true);
   }
 
-  function openEditModal(session: any) {
+  function openEditModal(session: Session) {
     setEditingSession(session);
     setError(null);
     setIsModalOpen(true);

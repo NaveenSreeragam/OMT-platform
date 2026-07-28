@@ -1,10 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Filter, ArrowUpDown, UserCheck } from 'lucide-react';
+import { Search, UserCheck } from 'lucide-react';
+import type { Profile, Registration, Score, Session } from '@/types';
+
+type RegistrationWithDetails = Registration & {
+  profiles?: Profile | null;
+  sessions?: Session | null;
+  scores?: Score[];
+};
 
 interface ParticipantsClientProps {
-  registrations: any[];
+  registrations: RegistrationWithDetails[];
 }
 
 export function AdminParticipantsClient({ registrations }: ParticipantsClientProps) {
@@ -24,7 +31,7 @@ export function AdminParticipantsClient({ registrations }: ParticipantsClientPro
   });
 
   const departments = Array.from(
-    new Set(registrations.map((r) => r.profiles?.department).filter(Boolean))
+    new Set(registrations.map((r) => r.profiles?.department).filter((department): department is string => Boolean(department)))
   );
 
   return (
