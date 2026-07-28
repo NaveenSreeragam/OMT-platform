@@ -79,12 +79,17 @@ export async function saveScoreAction(formData: FormData) {
 
     if (error) return { error: error.message };
 
-    // Update registration status to completed
-    await supabase
-      .from('registrations')
-      .update({ status: 'completed' })
-      .eq('id', registrationId);
   }
+
+  // A reviewed registration must always be shown as completed. Keeping this
+  // outside the insert branch also repairs older registrations whose scores
+  // were saved before their status was updated.
+  const { error: registrationError } = await supabase
+    .from('registrations')
+    .update({ status: 'completed' })
+    .eq('id', registrationId);
+
+  if (registrationError) return { error: registrationError.message };
 
   revalidatePath('/admin/scores');
   revalidatePath('/admin/leaderboard');

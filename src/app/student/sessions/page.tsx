@@ -17,16 +17,34 @@ export default async function StudentSessionsPage() {
     .eq('id', user?.id || '')
     .single();
 
-  // Fetch student's session registrations with associated session and score info
+  // Load registrations and sessions first. Scores are loaded separately below
+  // so session history does not depend on nested-relation cardinality.
   const { data: registrations } = await supabase
     .from('registrations')
     .select(`
       *,
-      sessions (*),
-      scores (*)
+      sessions (*)
     `)
     .eq('student_id', user?.id || '')
     .order('registered_at', { ascending: false });
+
+  const registrationIds = registrations?.map((registration) => registration.id) || [];
+  const { data: scores } = registrationIds.length
+    ? await supabase
+        .from('scores')
+        .select('*')
+        .in('registration_id', registrationIds)
+    : { data: [] };
+
+  const scoresByRegistration = new Map(
+    (scores || []).map((score) => [score.registration_id, score])
+  );
+  const sessionsWithScores = (registrations || []).map((registration) => ({
+    ...registration,
+    scores: scoresByRegistration.has(registration.id)
+      ? [scoresByRegistration.get(registration.id)]
+      : [],
+  }));
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -34,7 +52,7 @@ export default async function StudentSessionsPage() {
 
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-6xl mx-auto">
-          <MySessionsClient sessions={registrations || []} />
+          <MySessionsClient sessions={sessionsWithScores} />
         </div>
       </main>
     </div>
