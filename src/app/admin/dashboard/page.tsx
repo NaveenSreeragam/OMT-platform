@@ -52,10 +52,10 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
       <AdminSidebar adminName={adminProfile?.full_name} adminEmail={adminProfile?.email} />
 
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Header */}
           <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden">
