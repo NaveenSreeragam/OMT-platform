@@ -97,10 +97,11 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-semibold text-sm tracking-wider uppercase mb-4">Contact IEEE Student Branch</h4>
-            <p className="text-sm mb-2">Campus Engineering Hall, Room 402</p>
-            <p className="text-sm mb-2">Email: ieee.omt@college.edu</p>
-            <p className="text-sm">Phone: +1 (555) 019-2834</p>
+            <h4 className="text-white font-semibold text-sm tracking-wider uppercase mb-4">Contact</h4>
+            <p className="text-sm mb-2">Campus Computer Science Block</p>
+            <p className="text-sm mb-2">Email: naveensreeragam@gmail.com</p>
+            <p className="text-sm">Phone: +91 75107 08288</p>
+            <p className="text-sm">Phone: +91 6282 426 207</p>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
