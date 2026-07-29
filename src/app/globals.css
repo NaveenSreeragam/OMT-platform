@@ -1,22 +1,45 @@
-/* IEEE Color Palette and Global Theme */
+/* OMT ruby palette and global theme */
 @import "tailwindcss";
+
+@theme {
+  /* Re-map the legacy blue utility scale to a restrained ruby scale. */
+  --color-blue-50: #fff3f4;
+  --color-blue-100: #ffe3e6;
+  --color-blue-200: #fecdd3;
+  --color-blue-500: #bd1f35;
+  --color-blue-600: #a4142a;
+  --color-blue-700: #86101f;
+
+  /* Warm the inherited slate surfaces so the white space feels intentional. */
+  --color-slate-50: #fffafb;
+  --color-slate-100: #fff3f4;
+  --color-slate-200: #f3dfe2;
+  --color-slate-300: #e5c8cd;
+  --color-slate-400: #a98a91;
+  --color-slate-500: #80686e;
+  --color-slate-600: #674c53;
+  --color-slate-700: #4c3037;
+  --color-slate-800: #351a20;
+  --color-slate-900: #260e14;
+  --color-slate-950: #17070b;
+}
 
 :root {
   --background: #ffffff;
-  --foreground: #0f172a;
-  --primary: #00629B; /* IEEE Blue */
-  --primary-hover: #004e7c;
-  --primary-light: #e6f2f8;
-  --secondary: #f1f5f9;
-  --muted: #64748b;
-  --accent: #0284c7;
-  --border: #e2e8f0;
+  --foreground: #271116;
+  --primary: #8d1024;
+  --primary-hover: #650815;
+  --primary-light: #fff1f2;
+  --secondary: #fff7f7;
+  --muted: #756166;
+  --accent: #c5293d;
+  --border: #f0d7db;
   --card-bg: #ffffff;
   --radius: 0.75rem;
 }
 
 body {
-  background-color: #f8fafc;
+  background-color: #fffafb;
   color: var(--foreground);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-height: 100vh;
@@ -38,18 +61,36 @@ body {
   background-color: var(--primary-hover);
 }
 
+/* Compatibility for existing arbitrary IEEE-blue Tailwind values. */
+.bg-\[\#00629B\] { background-color: var(--primary) !important; }
+.text-\[\#00629B\] { color: var(--primary) !important; }
+.border-\[\#00629B\] { border-color: var(--primary) !important; }
+.hover\:bg-\[\#004e7c\]:hover { background-color: var(--primary-hover) !important; }
+.hover\:text-\[\#00629B\]:hover { color: var(--primary) !important; }
+.focus\:border-\[\#00629B\]:focus { border-color: var(--primary) !important; }
+.focus\:ring-\[\#00629B\]\/20:focus { --tw-ring-color: rgb(141 16 36 / 0.2) !important; }
+.ring-\[\#00629B\]\/20 { --tw-ring-color: rgb(141 16 36 / 0.2) !important; }
+.shadow-\[\#00629B\]\/20,
+.shadow-\[\#00629B\]\/25 { --tw-shadow-color: rgb(141 16 36 / 0.22) !important; }
+
+/* Adds depth to key red actions without making the interface loud. */
+.bg-\[\#00629B\],
+.bg-ieee-blue {
+  background-image: linear-gradient(135deg, rgb(166 23 46), var(--primary));
+}
+
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #fff1f2;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #e5a9b2;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #bd5868;
 }
