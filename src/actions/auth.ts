@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -151,11 +152,20 @@ export async function registerAction(formData: FormData) {
         .eq('session_id', activeSession.id);
 
       if ((count || 0) < activeSession.max_participants) {
-        await supabase.from('registrations').insert({
+        const { error: registrationError } = await supabase.from('registrations').insert({
           student_id: authData.user.id,
           session_id: activeSession.id,
           status: 'registered',
         });
+
+        if (registrationError) {
+          return {
+            error: `Account created, but session registration failed: ${registrationError.message}`,
+          };
+        }
+
+        revalidatePath('/admin/participants');
+        revalidatePath('/admin/dashboard');
       }
     }
   }
